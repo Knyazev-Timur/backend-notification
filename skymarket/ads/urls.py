@@ -10,5 +10,3 @@ urlpatterns = [
     path('', include(ad_router.urls))
 ]
 
-
-#1:42:50
