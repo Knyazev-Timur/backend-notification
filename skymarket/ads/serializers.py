@@ -17,5 +17,23 @@ class AdSerializer(serializers.ModelSerializer):
 
 
 class AdDetailSerializer(serializers.ModelSerializer):
-    # TODO сериалайзер для модели
-    pass
+    author_first_name = serializers.CharField(source='author.first_name', read_only=True)
+    author_last_name = serializers.CharField(source='author.last_name', read_only=True)
+    author_id = serializers.CharField(source='author.id', read_only=True)
+
+    # author_first_name = serializers.SerializerMethodField()
+    # author_last_name = serializers.SerializerMethodField()
+    # author_id = serializers.SerializerMethodField()
+    #
+    # def get_author_first_name(self, obj):
+    #     return obj.author.first_name
+    #
+    # def get_author_last_name(self, obj):
+    #     return obj.author.last_name
+    #
+    # def get_author_id(self, obj):
+    #     return obj.author_id
+
+    class Meta:
+        model = Ad
+        fields = '__all__'

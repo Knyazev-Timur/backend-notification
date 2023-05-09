@@ -5,7 +5,7 @@ from rest_framework import permissions
 
 from .models import Ad, Comment
 from .filters import AdFilter
-from .serializers import AdSerializer
+from .serializers import AdSerializer, AdDetailSerializer
 
 
 class AdPagination(pagination.PageNumberPagination):
@@ -19,7 +19,6 @@ class AdViewSet(viewsets.ModelViewSet):
     filter_backends = (DjangoFilterBackend,)
     filterset_class = AdFilter
     serializer_class = AdSerializer
-    permission_classes = []
 
     def get_queryset(self):
         if self.action == 'me':
@@ -27,11 +26,17 @@ class AdViewSet(viewsets.ModelViewSet):
         return Ad.objects.all()
 
     def get_permissions(self):
-        if self.action in ['list', 'retrive', 'create', 'me']:
+        if self.action in ['list', 'retrieve', 'create', 'me']:
             self.permission_classes = [permissions.IsAuthenticated]
         else:
             self.permission_classes = [permissions.IsAdminUser]
         return super().get_permissions()
+
+    def get_serializer_class(self):
+        if self.action == 'retrieve':
+            return AdDetailSerializer
+        return AdSerializer
+
 
     @action(detail=False, methods=['get'])
     def me(self, request, *args, **kwargs):

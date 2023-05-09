@@ -12,12 +12,14 @@ class User(AbstractBaseUser):
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
     phone = PhoneNumberField()
+    #image = models.ImageField(upload_to='media/')
+    image = models.ImageField(null=True, blank=True)
     is_active = models.BooleanField(default=False)
-    image = models.ImageField()
+
     objects = UserManager()
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['first_name', 'last_name', 'phone', "role"]
+    REQUIRED_FIELDS = ['first_name', 'last_name', 'phone', "role", "image"]
 
     @property
     def is_admin(self):
@@ -45,6 +47,9 @@ class User(AbstractBaseUser):
 
     def has_module_perms(self, app_label):
         return self.is_admin
+
+    def __str__(self):
+        return self.email
 
 
 
