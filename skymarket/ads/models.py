@@ -9,7 +9,17 @@ class Ad(models.Model):
     price = models.PositiveIntegerField()
     description = models.TextField()
     author = models.ForeignKey('users.User', on_delete=models.CASCADE)
+    image = models.ImageField(
+        upload_to="images/",
+        verbose_name="фото",
+        help_text="Разместите фото для объявления",
+        null=True,
+        blank=True,
+    )
+
     created_at = models.DateTimeField(auto_now_add=True)
+
+
 
     class Meta:
         verbose_name = 'Объявление'
