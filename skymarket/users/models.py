@@ -12,9 +12,7 @@ class User(AbstractBaseUser):
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
     phone = PhoneNumberField()
-    image = models.ImageField(_('image'), upload_to="django_media/users_ava", null=True, blank=True)
-    #image = models.ImageField(upload_to='media/')
-    #image = models.ImageField(null=True, blank=True)
+    image = models.ImageField(null=True, blank=True)
     is_active = models.BooleanField(default=False)
 
     def image_(self):
@@ -30,7 +28,7 @@ class User(AbstractBaseUser):
     objects = UserManager()
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['first_name', 'last_name', 'phone', "role", "image"]
+    REQUIRED_FIELDS = ['first_name', 'last_name', 'phone', "role"]
 
 
     class Meta:
