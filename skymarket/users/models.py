@@ -12,15 +12,35 @@ class User(AbstractBaseUser):
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
     phone = PhoneNumberField()
+    image = models.ImageField(_('image'), upload_to="django_media/users_ava", null=True, blank=True)
     #image = models.ImageField(upload_to='media/')
-    image = models.ImageField(null=True, blank=True)
+    #image = models.ImageField(null=True, blank=True)
     is_active = models.BooleanField(default=False)
+
+    def image_(self):
+        if self.image:
+            from django.utils.safestring import mark_safe
+            return mark_safe(u'<a href="{0}" target="_blank"><img src="{0}" width="150"/></a>'.format(self.image.url))
+        else:
+            return '(Нет изображения)'
+
+    image_.short_description = 'Аватарка пользователя'
+    image_.allow_tags = True
 
     objects = UserManager()
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['first_name', 'last_name', 'phone', "role", "image"]
 
+
+    class Meta:
+        verbose_name = _('Пользователь')
+        verbose_name_plural = _('Пользователи')
+        unique_together = ('email', 'phone',)
+
+    def __str__(self):
+        """ Строковое представление модели (отображается в консоли) """
+        return "{}, ({})".format(self.email, self.get_full_name())
     @property
     def is_admin(self):
         return self.role == UserRoles.ADMIN
